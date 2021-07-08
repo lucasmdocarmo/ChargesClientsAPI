@@ -2,6 +2,7 @@
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 using Payment.Charges.Domain.Entity;
+using Payments.Charges.Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,16 @@ namespace Payments.Charges.Infrastructure.Configuration
                 map.MapMember(x => x.DueDate).SetIsRequired(true);
                 map.MapMember(x => x.RecordDate).SetIsRequired(true);
                 map.MapMember(x => x.Value).SetIsRequired(true);
+                map.MapMember(x => x.CPF).SetIsRequired(true);
+            });
+            BsonClassMap.RegisterClassMap<Billing>(map =>
+            {
+                map.AutoMap();
+                map.SetIgnoreExtraElements(true);
+                map.MapIdMember(x => x.Id);
+                map.MapMember(x => x.TotalValue).SetIsRequired(true);
+                map.MapMember(x => x.ChargeValue).SetIsRequired(true);
+                map.MapMember(x => x.Name).SetIsRequired(true);
                 map.MapMember(x => x.CPF).SetIsRequired(true);
             });
         }

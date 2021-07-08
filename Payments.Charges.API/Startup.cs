@@ -41,6 +41,7 @@ namespace Payments.Charges.API
             services.AddScoped<IMongoContext, MongoContext>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IChargesRepository, ChargeRepository>();
+            services.AddScoped<IBillingRepository, BillingRepository>();
             services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;

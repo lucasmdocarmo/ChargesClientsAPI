@@ -67,11 +67,6 @@ namespace Payments.Charges.API.Controllers
         /// <summary>
         /// Get a charge
         /// </summary>
-        ///   public string CPF { get; set; }
-
-       // [DisplayName("Month")]
-       // public string Month { get; set; }
-        /// <param name="input"></param>
         /// <returns></returns>
         [HttpGet()]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -96,6 +91,7 @@ namespace Payments.Charges.API.Controllers
 
             return _port.ViewModel();
         }
+       
 
 
     }

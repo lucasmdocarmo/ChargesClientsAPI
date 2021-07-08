@@ -1,3 +1,4 @@
+using Confluent.Kafka;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -38,12 +39,11 @@ namespace Payments.Events.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<ICalculatorService, CostCalculator>();
             services.AddControllers();
+            services.AddScoped<ICalculatorService, CostCalculator>();
             services.AddScoped<PaymentsContext>();
             services.AddScoped<IUnitOfWork, PaymentsContext>();
             services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
-
             services.AddScoped<IChargesClientesRepository, PaymentRepository>();
             services.AddScoped<IServicesProducer, ServiceProducers>();
 

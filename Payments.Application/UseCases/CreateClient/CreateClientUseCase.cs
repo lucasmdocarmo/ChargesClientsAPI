@@ -67,7 +67,7 @@ namespace Payments.Clientes.Application.UseCases.CreateClient
             var data = new StringContent(json, Encoding.UTF8, "application/json");
             var httpClient = _client.CreateClient();
 
-            await httpClient.PostAsync(" ", data).ConfigureAwait(true);
+            await httpClient.PostAsync("https://localhost:61668/api/Payment/Client", data).ConfigureAwait(true);
         }
     }
 }

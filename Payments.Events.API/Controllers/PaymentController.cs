@@ -9,8 +9,11 @@ using System.Threading.Tasks;
 
 namespace Payments.Events.API.Controllers
 {
-    [Route("api/[controller]")]
+
     [ApiController]
+    [ApiVersion("1.0")]
+    [Produces("application/json")]
+    [Route("V{api-version:apiVersion}/[controller]")]
     public class PaymentController : ControllerBase
     {
         public readonly IServicesProducer _producer;

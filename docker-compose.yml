@@ -50,6 +50,12 @@ services:
     depends_on:
       - mssql-server
 
+  payments.events.consumer.api:
+    image: ${DOCKER_REGISTRY-}paymentseventsconsumerapi
+    build:
+      context: .
+      dockerfile: Payments.Events.Consumer.API/Dockerfile
+
   mongodb-primary:
     container_name: mongo
     image: 'bitnami/mongodb:latest'
@@ -107,6 +113,8 @@ services:
       - 19000:9000
     environment:
       KAFKA_BROKERCONNECT: kafka:29092
+
+
 
 networks: 
   broker-kafka:

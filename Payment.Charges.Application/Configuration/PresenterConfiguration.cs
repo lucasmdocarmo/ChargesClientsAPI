@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Payments.Charges.Application.UseCases.DisplayCharge.Ports;
 using Payments.Charges.Application.UseCases.DisplayCharge.Presenter;
+using Payments.Charges.Application.UseCases.RecordReport.Ports;
+using Payments.Charges.Application.UseCases.RecordReport.Presenter;
 using Payments.Charges.Application.UseCases.RegisterCharge.Ports;
 using Payments.Charges.Application.UseCases.RegisterCharge.Presenter;
 using Payments.Core.Shared.Contracts.Application.Ports;
@@ -20,8 +22,10 @@ namespace Payments.Charges.Application.Configuration
             services.AddScoped<IBasePresenter, BasePresenter>();
             services.AddScoped<IDisplayChargePort, DisplayChargesPresenter>();
             services.AddScoped<IRegisterChargePort, RegisterChargePresenter>();
+            services.AddScoped<IRecordReport, RecordPresenter>();
 
             services.AddScoped<DisplayChargesPresenter>();
+            services.AddScoped<RecordPresenter>();
             services.AddScoped<RegisterChargePresenter>();
 
             return services;

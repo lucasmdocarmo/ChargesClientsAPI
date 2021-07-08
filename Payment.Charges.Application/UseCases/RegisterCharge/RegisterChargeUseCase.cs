@@ -55,7 +55,7 @@ namespace Payments.Charges.Application.UseCases.RegisterCharge
             var data = new StringContent(json, Encoding.UTF8, "application/json");
             var httpClient = _client.CreateClient();
 
-            await httpClient.PostAsync(" ", data).ConfigureAwait(true);
+            await httpClient.PostAsync("https://localhost:61668/api/Payment/Charge", data).ConfigureAwait(true);
         }
     }
 }
