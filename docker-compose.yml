@@ -1,0 +1,113 @@
+version: '3.4'
+
+services:
+  payments.charges.api:
+    image: ${DOCKER_REGISTRY-}paymentschargesapi
+    build:
+      context: .
+      dockerfile: Payments.Charges.API/Dockerfile
+    ports:
+      - "5005:5005"
+    links:
+      - mongodb-primary
+    depends_on:
+      - mongodb-primary
+    environment: 
+        MONGOCONNECTION: "mongodb://root:password123@mongodb-primary:27017"
+        DATABASENAME: "Chargedb"
+        ASPNETCORE_ENVIRONMENT: "Development"
+        ASPNETCORE_URLS: http://+:5005
+
+  payments.clients.api:
+    image: ${DOCKER_REGISTRY-}paymentsclientsapi
+    build:
+      context: .
+      dockerfile: Payments.Clients.API/Dockerfile
+    environment:
+      DbServer: "mssql-server"
+      DbPort: "1433"
+      DbUser: "SA"
+      Password: "stone#2021"
+      Database: "Payment-ClientDb"
+    ports: 
+      - "8090:80"
+    depends_on:
+      - mssql-server
+
+  payments.events.api:
+    image: ${DOCKER_REGISTRY-}paymentseventsapi
+    build:
+      context: .
+      dockerfile: Payments.Events.API/Dockerfile
+    environment:
+      DbServer: "mssql-server"
+      DbPort: "1433"
+      DbUser: "SA"
+      Password: "stone#2021"
+      Database: "Payment-charges-clients-db"
+    ports: 
+      - "8090:80"
+    depends_on:
+      - mssql-server
+
+  mongodb-primary:
+    container_name: mongo
+    image: 'bitnami/mongodb:latest'
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGODB_ADVERTISED_HOSTNAME=mongodb-primary
+      - MONGODB_REPLICA_SET_MODE=primary
+      - MONGODB_ROOT_PASSWORD=password123
+      - MONGODB_REPLICA_SET_KEY=replicasetkey123
+
+  mssql-server:
+    image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "stone#2021"
+      MSSQL_PID: Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - C:\temp\sqlserver:/var/opt/mssql/data
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    networks: 
+      - broker-kafka
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    networks: 
+      - broker-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop:latest
+    networks: 
+      - broker-kafka
+    depends_on:
+      - kafka
+    ports:
+      - 19000:9000
+    environment:
+      KAFKA_BROKERCONNECT: kafka:29092
+
+networks: 
+  broker-kafka:
+    driver: bridge
