@@ -45,6 +45,7 @@ namespace Payments.Clientes.Application.UseCases.CreateClient
 
                 await _repository.Add(_objClient);
                 await _repository.SaveChanges();
+                await ReplicateClient(input).ConfigureAwait(true);
                 _port.Created();
             }
             catch (Exception ex)

@@ -41,6 +41,7 @@ namespace Payments.Charges.Application.UseCases.RegisterCharge
                 {
                     _repository.Add(chargeObject);
                     await _uow.Commit();
+                    await ReplicateCharge(input).ConfigureAwait(true);
                 }
                 _port.Created();
             }
@@ -55,7 +56,7 @@ namespace Payments.Charges.Application.UseCases.RegisterCharge
             var data = new StringContent(json, Encoding.UTF8, "application/json");
             var httpClient = _client.CreateClient();
 
-            await httpClient.PostAsync("https://localhost:61668/api/Payment/Charge", data).ConfigureAwait(true);
+            await httpClient.PostAsync("https://eventsapi:8090/api/Payment/Charge", data).ConfigureAwait(true);
         }
     }
 }

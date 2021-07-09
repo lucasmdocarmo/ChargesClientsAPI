@@ -42,6 +42,9 @@ namespace Payments.Charges.API
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IChargesRepository, ChargeRepository>();
             services.AddScoped<IBillingRepository, BillingRepository>();
+
+            
+            services.AddCors();
             services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
@@ -89,7 +92,7 @@ namespace Payments.Charges.API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Payments.Charges.API v1"));
             }
-
+            app.UseCors();
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();

@@ -2,6 +2,7 @@ version: '3.4'
 
 services:
   payments.charges.api:
+    container_name: chargesapi
     image: ${DOCKER_REGISTRY-}paymentschargesapi
     build:
       context: .
@@ -17,8 +18,13 @@ services:
         DATABASENAME: "Chargedb"
         ASPNETCORE_ENVIRONMENT: "Development"
         ASPNETCORE_URLS: http://+:5005
+    networks:
+        default:
+            aliases:
+                - chargesapi
 
   payments.clients.api:
+    container_name: clientsapi
     image: ${DOCKER_REGISTRY-}paymentsclientsapi
     build:
       context: .
@@ -33,8 +39,13 @@ services:
       - "8090:80"
     depends_on:
       - mssql-server
+    networks:
+        default:
+            aliases:
+                - clientsapi
 
   payments.events.api:
+    container_name: eventsapi
     image: ${DOCKER_REGISTRY-}paymentseventsapi
     build:
       context: .
@@ -49,12 +60,21 @@ services:
       - "8090:80"
     depends_on:
       - mssql-server
+    networks:
+        default:
+            aliases:
+                - eventsapi
 
   payments.events.consumer.api:
+    container_name: consumereventsapi
     image: ${DOCKER_REGISTRY-}paymentseventsconsumerapi
     build:
       context: .
       dockerfile: Payments.Events.Consumer.API/Dockerfile
+    networks:
+        default:
+            aliases:
+                - consumereventsapi
 
   mongodb-primary:
     container_name: mongo
