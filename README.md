@@ -1,4 +1,4 @@
-# PaymentsProject
+# ChargesClientsAPI
 Simple Project using MongoDb, EF Core, Kafka and .NET Core 5 to create a Charge and Billing Context for clients.
 
 To Access APIs:
